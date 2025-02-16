@@ -12,10 +12,6 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
-
-// Routes
-
-// Get Tech Stack
 app.get('/api/tech-stack', async (req, res) => {
     try {
         const techStack = await prisma.techStack.findMany({
@@ -27,7 +23,6 @@ app.get('/api/tech-stack', async (req, res) => {
     }
 });
 
-// Get Blog Posts
 app.get('/api/blog-posts', async (req, res) => {
     try {
         const posts = await prisma.blogPost.findMany({
@@ -39,7 +34,6 @@ app.get('/api/blog-posts', async (req, res) => {
     }
 });
 
-// Get Gallery Photos
 app.get('/api/gallery', async (req, res) => {
     try {
         const photos = await prisma.galleryPhoto.findMany({
@@ -51,7 +45,6 @@ app.get('/api/gallery', async (req, res) => {
     }
 });
 
-// Get Projects
 app.get('/api/projects', async (req, res) => {
     try {
         const projects = await prisma.project.findMany();
@@ -62,7 +55,6 @@ app.get('/api/projects', async (req, res) => {
     }
 });
 
-// Get Socials
 app.get('/api/socials', async (req, res) => {
     try {
         const socials = await prisma.socialProfile.findMany({
