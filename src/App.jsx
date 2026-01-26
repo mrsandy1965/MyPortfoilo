@@ -1,5 +1,7 @@
 import React from 'react'
-import { Dock, Navbar, Welcome } from '#components'
+import { Dock, Navbar, Welcome} from '#components'
+import { TerminalWindow } from '#windows'
+
 const App = () => {
   return (
     <main>
@@ -7,6 +9,7 @@ const App = () => {
       <Welcome />
       <Dock />
 
+      <TerminalWindow />
     </main>
   )
 }
