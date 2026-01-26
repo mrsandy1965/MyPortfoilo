@@ -38,18 +38,16 @@ const Dock = () => {
     })
     const toggleApp = ({id,canOpen}) => {
         if(!canOpen) return;
-        const window = windows[id]
-        if(!window){ 
+        const appWindow = windows[id]
+        if(!appWindow){ 
             console.log("Window not found for app",id)
             return;
         }
-        if(window.isOpen){
+        if(appWindow.isOpen){
             closeWindow(id)
         }else{
             openWindow(id)
         }
-
-        console.log(windows)
     }
     return (
     <section id="dock"> 

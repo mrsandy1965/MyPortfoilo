@@ -36,12 +36,13 @@ const WindowWrapper = (Component , windowKey) => {
         useGSAP(()=>{
             const currElement = ref.current;
             if(!currElement || !isOpen) return;
-            const header = currElement.querySelector('#window-header')
+            const header = currElement.querySelector('.window-header')
             const [instance] = Draggable.create(currElement, {
                 trigger: header || currElement,
                 bounds: "body",
                 type: "x,y",
                 edgeResistance: 0.65,
+                cursor: "default",
                 onClick: () => {
                     focusWindow(windowKey)
                 },
