@@ -1,3 +1,4 @@
 import TerminalWindow from "./Terminal";
+import SafariWindow from "./Safari";
 
-export {TerminalWindow}
+export {TerminalWindow,SafariWindow}
