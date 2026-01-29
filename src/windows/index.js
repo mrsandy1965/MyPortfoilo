@@ -1,4 +1,4 @@
 import TerminalWindow from "./Terminal";
 import SafariWindow from "./Safari";
-
-export {TerminalWindow,SafariWindow}
+import ContactWindow from "./Contact";
+export {TerminalWindow,SafariWindow,ContactWindow}
