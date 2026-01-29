@@ -5,7 +5,7 @@ import { useGSAP } from "@gsap/react"
 import gsap from "gsap"
 import useWindowStore from "#store/window"
 const Dock = () => {
-    const {openWindow,closeWindow,windows} = useWindowStore()
+    const {openWindow, closeWindow, minimizeWindow, windows} = useWindowStore()
     const dockRef = useRef(null)
     useGSAP(()=>{
         const dock = dockRef.current
@@ -43,16 +43,24 @@ const Dock = () => {
             console.log("Window not found for app",id)
             return;
         }
-        if(appWindow.isOpen){
-            closeWindow(id)
+        // If minimized, restore it
+        if(appWindow.isMinimized){
+            // Restore by re-opening
+            openWindow(id)
+        } else if(appWindow.isOpen){
+            minimizeWindow(id)
         }else{
             openWindow(id)
         }
     }
+    
     return (
     <section id="dock"> 
         <div className="dock-container" ref={dockRef}>
             {dockApps.map(({id,name,icon,canOpen})=>{
+                const appWindow = windows[id]
+                const isMinimized = appWindow?.isMinimized || false
+                
                 return <div key={id} className="relative flex justify-center mx-1" >
                     <button 
                     type="button" 
@@ -69,7 +77,11 @@ const Dock = () => {
                          className={canOpen ? "" : "opacity-90"}
                          />
                     </button>
-                   
+                    
+                    {/* Indicator for minimized windows */}
+                    {isMinimized && (
+                        <div className="absolute -bottom-1 w-1 h-1 bg-gray-400 mt-1 rounded-full"></div>
+                    )}
                 </div>
             })}
             <Tooltip id="dock-tooltip" className="tooltip" place="top"/>
