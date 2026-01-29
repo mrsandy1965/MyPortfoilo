@@ -1,3 +1,5 @@
+import { immer } from "zustand/middleware/immer";
+
 const { locations } = require("#constants");
 const { create } = require("zustand");
 const DEFAULT_LOCATION = locations.work
@@ -8,7 +10,7 @@ const useLocationStore = create(immer((set)=>({
 
     setActiveLocation:(location=null)=>set((state)=>{state.activeLocation = location}),
 
-    resetAtiveLocation:()=>set((state)=>{state.activeLocation = DEFAULT_LOCATION})
+    resetActiveLocation:()=>set((state)=>{state.activeLocation = DEFAULT_LOCATION})
 })))
 
 export default useLocationStore;
