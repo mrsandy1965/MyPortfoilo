@@ -15,7 +15,7 @@ const Home = () => {
     }
     useGSAP(() => {
         const instances = Draggable.create(".folder");
-        return () => instances.forEach(i => i.kill());
+return () => instances.forEach(i => { i.kill(); });
     }, []);
   return (
     <section id="home">
