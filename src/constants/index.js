@@ -162,26 +162,31 @@ const photosLinks = [
     id: 1,
     icon: "/icons/gicon1.svg",
     title: "Library",
+    tag: "all",
   },
   {
     id: 2,
     icon: "/icons/gicon2.svg",
     title: "Memories",
+    tag: "memories",
   },
   {
     id: 3,
     icon: "/icons/file.svg",
     title: "Places",
+    tag: "places",
   },
   {
     id: 4,
     icon: "/icons/gicon4.svg",
     title: "People",
+    tag: "people",
   },
   {
     id: 5,
     icon: "/icons/gicon5.svg",
     title: "Favorites",
+    tag: "favorites",
   },
 ];
 
@@ -189,18 +194,34 @@ const gallery = [
   {
     id: 1,
     img: "/images/gal1.png",
+    title: "Portfolio Showcase",
+    date: "2024-01-15",
+    tags: ["memories", "people"],
+    isFavorite: true,
   },
   {
     id: 2,
     img: "/images/gal2.png",
+    title: "Team Meeting",
+    date: "2024-02-10",
+    tags: ["people", "places"],
+    isFavorite: false,
   },
   {
     id: 3,
     img: "/images/gal3.png",
+    title: "Conference Talk",
+    date: "2024-03-05",
+    tags: ["memories", "places"],
+    isFavorite: true,
   },
   {
     id: 4,
     img: "/images/gal4.png",
+    title: "Workspace Setup",
+    date: "2024-03-20",
+    tags: ["places"],
+    isFavorite: false,
   },
 ];
 
@@ -493,14 +514,14 @@ export const locations = {
 const INITIAL_Z_INDEX = 1000;
 
 const WINDOW_CONFIG = {
-  finder: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  contact: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  resume: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  safari: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  photos: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  terminal: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  txtfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
-  imgfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null },
+  finder: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null, width: 800, height: 600 },
+  contact: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null, width: 800, height: 600 },
+  resume: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null, width: 900, height: 700 },
+  safari: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null, width: 1000, height: 700 },
+  photos: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null, width: 900, height: 700 },
+  terminal: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null, width: 800, height: 500 },
+  txtfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null, width: 700, height: 500 },
+  imgfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null, width: 800, height: 600 },
 };
 
 export { INITIAL_Z_INDEX, WINDOW_CONFIG };

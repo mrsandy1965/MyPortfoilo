@@ -1,6 +1,6 @@
 import React from 'react'
-import { Dock, Navbar, Welcome} from '#components'
-import { TerminalWindow,SafariWindow, ContactWindow } from '#windows'
+import { Dock, Home, Navbar, Welcome} from '#components'
+import { TerminalWindow, SafariWindow, ContactWindow, FinderWindow, ResumeWindow, TxtFileWindow, ImgFileWindow, PhotosWindow } from '#windows'
 
 const App = () => {
   return (
@@ -12,6 +12,12 @@ const App = () => {
       <TerminalWindow />
       <SafariWindow />
       <ContactWindow />
+      <FinderWindow />
+      <ResumeWindow />
+      <TxtFileWindow />
+      <ImgFileWindow />
+      <PhotosWindow />
+      <Home />
     </main>
   )
 }

@@ -61,8 +61,8 @@ const Welcome = () => {
     },[])
   return (
     <section id="welcome" className=''>
-        <p ref={subtitleRef}>{renderText("Hey, I'm Sandesh", "text-3xl font-georama" , 100)}</p>
-        <h1 ref={titleRef} className='mt-7'>{renderText("Welcome", "text-9xl font-georama italic")}</h1>
+        <p ref={subtitleRef}>{renderText("Hey, I'm Sandesh! welcome to my", "text-3xl font-georama" , 100)}</p>
+        <h1 ref={titleRef} className='mt-7'>{renderText("portfolio", "text-9xl font-georama italic")}</h1>
         <div className='small-screen'>
             <p>Portfolio designed for desktop/tablet</p>
         </div>
