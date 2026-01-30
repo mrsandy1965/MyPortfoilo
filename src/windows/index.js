@@ -7,4 +7,6 @@ import TxtFileWindow from "./TxtFile";
 import ImgFileWindow from "./ImgFile";
 import PhotosWindow from "./Photos";
 
-export { TerminalWindow, SafariWindow, ContactWindow, FinderWindow, ResumeWindow, TxtFileWindow, ImgFileWindow, PhotosWindow }
+import AdminWindow from "./Admin";
+
+export { TerminalWindow, SafariWindow, ContactWindow, FinderWindow, ResumeWindow, TxtFileWindow, ImgFileWindow, PhotosWindow, AdminWindow }

@@ -3,6 +3,18 @@ import { create } from "zustand"
 import { immer } from "zustand/middleware/immer"
 
 const useWindowStore = create(immer((set) => ({
+    // Merge default config with admin since we can't easily modify the constant import directly without a refactor
+    // Ideally WINDOW_CONFIG should have included it, but we can patch it here or assume we updated the constant.
+    // Let's modify the store initialization to include admin if it's missing in constants, 
+    // BUT actually, I should just modify the constant file or the store initialization.
+    // The previous file view showed WINDOW_CONFIG is imported. I should probably add it there.
+    // Wait, I can't modify #constants/index.js easily if it's a huge list. 
+    // I already have the WINDOW_CONFIG in the previous file.
+    // Let's check where WINDOW_CONFIG is defined. It is in constants/index.js
+
+    // I will use replace_file_content on constants/index.js instead to add the admin window config.
+    // That is cleaner.
+
     windows: WINDOW_CONFIG,
     nextZIndex: INITIAL_Z_INDEX + 1,
     openWindow: (windowKey, data = null) => set((state) => {

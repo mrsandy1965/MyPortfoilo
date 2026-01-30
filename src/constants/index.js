@@ -82,6 +82,7 @@ const blogPosts = [
       "TypeScript Explained: What It Is, Why It Matters, and How to Master It",
     image: "/images/blog1.png",
     link: "https://jsmastery.com/blog/typescript-explained-what-it-is-why-it-matters-and-how-to-master-it",
+    tags: ["Frontend", "Dev Tools"],
   },
   {
     id: 2,
@@ -89,6 +90,7 @@ const blogPosts = [
     title: "The Ultimate Guide to Mastering Three.js for 3D Development",
     image: "/images/blog2.png",
     link: "https://jsmastery.com/blog/the-ultimate-guide-to-mastering-three-js-for-3d-development",
+    tags: ["Frontend", "Design"],
   },
   {
     id: 3,
@@ -96,6 +98,7 @@ const blogPosts = [
     title: "The Ultimate Guide to Mastering GSAP Animations",
     image: "/images/blog3.png",
     link: "https://jsmastery.com/blog/the-ultimate-guide-to-mastering-gsap-animations",
+    tags: ["Frontend", "Design", "Styling"],
   },
 ];
 
@@ -522,6 +525,7 @@ const WINDOW_CONFIG = {
   terminal: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null, width: 800, height: 500 },
   txtfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null, width: 700, height: 500 },
   imgfile: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null, width: 800, height: 600 },
+  admin: { isOpen: false, zIndex: INITIAL_Z_INDEX, data: null, width: 800, height: 600 },
 };
 
 export { INITIAL_Z_INDEX, WINDOW_CONFIG };

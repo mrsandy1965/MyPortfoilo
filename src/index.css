@@ -390,6 +390,10 @@ body {
     }
   }
 
+  #admin {
+    @apply w-xl absolute top-32 left-1/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+  }
+
   #home {
     @apply relative z-0 max-sm:hidden;
 

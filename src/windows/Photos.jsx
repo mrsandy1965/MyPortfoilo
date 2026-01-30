@@ -1,15 +1,20 @@
 import { WindowControls } from "#components";
 import WindowWrapper from "#hoc/WindowWrapper";
-import { gallery as initialGallery, photosLinks } from "#constants";
+import { photosLinks } from "#constants";
 import { useState, useMemo, useEffect } from "react";
 import useWindowStore from "#store/window";
+import useContentStore from "#store/content";
 import clsx from "clsx";
 import { Search, Heart, Tag, X } from "lucide-react";
 
 const Photos = () => {
     const [activeAlbum, setActiveAlbum] = useState(1); // Default to first album
     const [searchTerm, setSearchTerm] = useState("");
-    const [galleryData, setGalleryData] = useState(initialGallery);
+    
+    // Use data and actions from the content store
+    const { gallery, toggleFavorite: storeToggleFavorite, addTag: storeAddTag, removeTag: storeRemoveTag } = useContentStore();
+    const galleryData = gallery || [];
+    
     const [contextMenu, setContextMenu] = useState(null);
     const [showTagModalId, setShowTagModalId] = useState(null);
     const [sidebarWidth, setSidebarWidth] = useState(256); // Default 256px (w-64)
@@ -68,9 +73,7 @@ const Photos = () => {
     };
 
     const toggleFavorite = (imageId) => {
-        setGalleryData(prev => prev.map(img => 
-            img.id === imageId ? { ...img, isFavorite: !img.isFavorite } : img
-        ));
+        storeToggleFavorite(imageId);
         setContextMenu(null);
     };
 
@@ -80,15 +83,14 @@ const Photos = () => {
     };
 
     const toggleTag = (imageId, tag) => {
-        setGalleryData(prev => prev.map(img => {
-            if (img.id === imageId) {
-                const tags = img.tags.includes(tag)
-                    ? img.tags.filter(t => t !== tag)
-                    : [...img.tags, tag];
-                return { ...img, tags };
-            }
-            return img;
-        }));
+        const image = galleryData.find(img => img.id === imageId);
+        if(!image) return;
+        
+        if (image.tags.includes(tag)) {
+            storeRemoveTag(imageId, tag);
+        } else {
+            storeAddTag(imageId, tag);
+        }
     };
 
     // Close context menu on click outside

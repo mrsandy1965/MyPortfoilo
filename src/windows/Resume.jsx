@@ -9,6 +9,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@${pdfjs.vers
 
 const Resume = () => {
     const [numPages, setNumPages] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     const onDocumentLoadSuccess = ({ numPages }) => {

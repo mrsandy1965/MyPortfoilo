@@ -1,8 +1,11 @@
 import { WindowControls } from "#components"
-import { socials } from "#constants"
 import WindowWrapper from "#hoc/WindowWrapper"
+import useContentStore from "#store/content"
 
 const Contact = () => {
+  const { socials } = useContentStore();
+  const socialData = socials || [];
+
   return (
     <>
     <div className="window-header">
@@ -16,7 +19,7 @@ const Contact = () => {
             I'm in.
         </p>
         <ul>
-            {socials.map(({id,bg,link,icon,text})=>(
+            {socialData.map(({id,bg,link,icon,text})=>(
                 <li key={id} style={{backgroundColor: bg}}>
                     <a href={link} target="_blank" rel="noopener noreferrer" title={text}>
                         <img src={icon} alt={text} className="size-5" />

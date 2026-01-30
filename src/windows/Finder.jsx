@@ -1,8 +1,8 @@
 import { WindowControls } from "#components"
-import { locations } from "#constants"
 import WindowWrapper from "#hoc/WindowWrapper"
 import { Search } from "lucide-react"
 import useLocationStore from '#store/location'
+import useContentStore from '#store/content'
 import clsx from "clsx"
 import useWindowStore from "#store/window"
 import { useState, useEffect, useRef } from "react"
@@ -10,6 +10,7 @@ import { useState, useEffect, useRef } from "react"
 const Finder = () => {
     const {activeLocation, setActiveLocation} = useLocationStore()
     const {openWindow } = useWindowStore();
+    const { locations } = useContentStore(); // Use dynamic content
     const [sidebarWidth, setSidebarWidth] = useState(256); // Default 256px
     const [isResizing, setIsResizing] = useState(false);
 
@@ -95,8 +96,8 @@ const Finder = () => {
 
     <div className="bg-white flex h-full" style={{ '--sidebar-width': `${sidebarWidth}px` }}>
         <div className="sidebar">
-            {renderList("Favorites", Object.values(locations))}
-            {renderList("My Projects", locations.work.children)}
+            {renderList("Favorites", locations ? Object.values(locations) : [])}
+            {renderList("My Projects", locations?.work?.children || [])}
         </div>
         
         {/* Resize Handle */}
@@ -110,7 +111,7 @@ const Finder = () => {
         />
 
         <ul className="content">
-            {(activeLocation?.children ?? []).map((item)=>(
+            {(activeLocation?.children || []).map((item)=>(
                 <li key={item.id} 
                     onClick={(e)=>{
                         e.stopPropagation();
