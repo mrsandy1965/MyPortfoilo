@@ -15,9 +15,11 @@ const Finder = () => {
     const [isResizing, setIsResizing] = useState(false);
 
     const openItem = (item)=>{
-        if(!item.fileType || !item.kind) {
-            console.warn("Invalid item type or kind", item);
-            return;
+        // Fix: Folders might not have fileType, so we should check if kind exists.
+        // If it's a file, it should have fileType.
+        if(!item.kind) {
+             console.warn("Invalid item kind", item);
+             return;
         }
         if(item.fileType === 'pdf') return openWindow("resume")
         if(item.kind === 'folder') return setActiveLocation(item)

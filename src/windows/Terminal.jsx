@@ -119,9 +119,9 @@ const Terminal = () => {
 
         contact: () => (
              <div>
-                <p>📧 Email: <a href="mailto:sandeshlendve@gmail.com" className="text-blue-400 hover:underline">sandeshlendve@gmail.com</a></p>
+                <p>📧 Email: <a href="mailto:8055sandesh8055@gmail.com" className="text-blue-400 hover:underline">8055sandesh8055@gmail.com</a></p>
                 <p>🐱 GitHub: <a href="https://github.com/mrsandy1965" target="_blank" rel="noreferrer" className="text-blue-400 hover:underline">github.com/mrsandy1965</a></p>
-                 <p>🔗 LinkedIn: <a href="https://linkedin.com/in/sandeshlendve" target="_blank" rel="noreferrer" className="text-blue-400 hover:underline">linkedin.com/in/sandeshlendve</a></p>
+                 <p>🔗 LinkedIn: <a href="https://www.linkedin.com/in/sandesh-lendve" target="_blank" rel="noreferrer" className="text-blue-400 hover:underline">linkedin.com/in/sandesh-lendve</a></p>
             </div>
         ),
 

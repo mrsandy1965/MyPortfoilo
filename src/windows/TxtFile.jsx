@@ -21,12 +21,12 @@ const TxtFile = () => {
     }
 
     return (
-        <>
-            <div className="window-header">
+        <div className="h-full flex flex-col">
+            <div className="window-header flex-none">
                 <WindowControls target="txtfile" />
                 <h2>{fileData.name}</h2>
             </div>
-            <div className="bg-white p-8 min-h-[500px] max-w-3xl overflow-y-auto">
+            <div className="bg-white p-8 flex-1 overflow-y-auto max-w-3xl">
                 {fileData.subtitle && (
                     <h3 className="text-2xl font-bold mb-4 text-gray-800">{fileData.subtitle}</h3>
                 )}
@@ -45,7 +45,7 @@ const TxtFile = () => {
                     ))}
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

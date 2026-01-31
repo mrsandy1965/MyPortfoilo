@@ -27,7 +27,7 @@ const ImgFile = () => {
                 <WindowControls target="imgfile" />
                 <h2>{fileData.name}</h2>
                 {fileData.imageUrl && (
-                    <a href={fileData.imageUrl} download={fileData.name} className="cursor-pointer" title="Download Image">
+                    <a href={fileData.imageUrl} download={fileData.name} className="cursor-pointer" title="Download Image" target="_blank" rel="noopener noreferrer">
                         <DownloadIcon className="icon"/>
                     </a>
                 )}

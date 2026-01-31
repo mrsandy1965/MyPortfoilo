@@ -1,12 +1,13 @@
-import { locations } from "#constants"
+import useContentStore from "#store/content";
 import useLocationStore from "#store/location";
 import useWindowStore from "#store/window";
 import { useGSAP } from "@gsap/react";
 import clsx from "clsx";
 import { Draggable } from "gsap/Draggable";
 
-const projects = locations.work?.children ?? [];
 const Home = () => {
+    const locations = useContentStore(state => state.locations);
+    const projects = locations.work?.children ?? [];
     const {setActiveLocation} = useLocationStore()
     const {openWindow } = useWindowStore();
     const handleOpenProject = (project) => {
@@ -22,7 +23,7 @@ return () => instances.forEach(i => { i.kill(); });
         <ul>
             {projects.map((project)=>(
                 <li key={project.id} className={clsx("group folder",project.windowPosition)}
-                
+                style={project.style}
                 onClick={()=> handleOpenProject(project)}>
                     <img src="/images/folder.png" alt={project.name} />
                     <p>{project.name}</p>
