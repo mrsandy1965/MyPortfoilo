@@ -1,21 +1,23 @@
 # 🖥️ macOS Portfolio
 
-A macOS-style interactive developer portfolio built with **React**, **Vite**, and **Tailwind CSS**, featuring a live backend powered by **Express** and **PostgreSQL** (via Prisma + Neon).
+A macOS-style interactive developer portfolio built with **React 19**, **Vite**, and **Tailwind CSS v4**, with a live backend powered by **Express** and **PostgreSQL** (via Prisma + Neon).
+
+> Live demo: _coming soon_
 
 ---
 
 ## ✨ Features
 
-- macOS-style desktop UI with draggable, resizable windows
-- **Finder** — browse projects in a file-folder structure
-- **Safari** — view blog posts with a built-in browser UI
-- **Terminal** — interactive terminal with portfolio commands
-- **Photos** — gallery with favorites and tags
-- **Resume** — embedded Google Drive PDF viewer
-- **Contact** — social links window
-- Apple-style boot loading screen
-- Admin portal for content management
-- Data synced from a PostgreSQL database on every load
+- 🖱️ macOS-style desktop with draggable, resizable windows
+- 📁 **Finder** — browse projects in a file-folder structure
+- 🌐 **Safari** — view blog posts with a built-in browser UI
+- 💻 **Terminal** — interactive terminal with custom portfolio commands
+- 🖼️ **Photos** — gallery with favorites and tag filtering
+- 📄 **Resume** — embedded Google Drive PDF viewer
+- 📬 **Contact** — social links window
+- 🍎 Apple-style animated boot / loading screen
+- 🔐 **Admin** portal for full content management (projects, blog, gallery, socials)
+- ⚡ All data is live-synced from PostgreSQL on every load
 
 ---
 
@@ -23,17 +25,29 @@ A macOS-style interactive developer portfolio built with **React**, **Vite**, an
 
 ```
 portfolio/
-├── public/           # Static assets (icons, images)
-├── prisma/           # Prisma schema and migrations
-├── scripts/          # Seed scripts
-├── server/           # Express API server
+├── public/            # Static assets (app icons, images)
+├── prisma/            # Prisma schema & migrations
+│   └── schema.prisma
+├── scripts/           # Database seed scripts
+│   └── seed.cjs
+├── server/            # Express REST API
 │   └── index.js
 └── src/
-    ├── components/   # Reusable UI components (Dock, Navbar, etc.)
-    ├── constants/    # Default/fallback data
-    ├── hoc/          # Higher-order components (WindowWrapper)
-    ├── store/        # Zustand state management
-    └── windows/      # Individual window components
+    ├── App.jsx        # Root app component
+    ├── main.jsx       # Entry point
+    ├── index.css      # Global styles
+    ├── components/    # Reusable UI (Dock, Navbar, BootScreen, etc.)
+    ├── constants/     # Default / fallback data
+    ├── hoc/           # Higher-order components (WindowWrapper)
+    ├── store/         # Zustand state management
+    └── windows/       # Individual window apps
+        ├── Admin.jsx
+        ├── Contact.jsx
+        ├── Finder.jsx
+        ├── Photos.jsx
+        ├── Resume.jsx
+        ├── Safari.jsx
+        └── Terminal.jsx
 ```
 
 ---
@@ -42,8 +56,10 @@ portfolio/
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) v18+
-- A PostgreSQL database (e.g., [Neon](https://neon.tech/) — free tier works)
+- [Node.js](https://nodejs.org/) **v18+**
+- A PostgreSQL database — [Neon](https://neon.tech/) offers a free tier
+
+---
 
 ### 1. Clone the repository
 
@@ -60,26 +76,28 @@ npm install
 
 ### 3. Configure environment variables
 
-Create a `.env` file in the root directory:
+Create a `.env` file in the **root** of the project:
 
 ```env
+# PostgreSQL connection string (required)
 DATABASE_URL="postgresql://USER:PASSWORD@HOST/DATABASE?sslmode=require"
+
+# Optional — defaults to 3000
+PORT=3000
 ```
 
-> **Tip:** You can get a free PostgreSQL connection string from [Neon](https://neon.tech/).
+> **Tip:** Get a free connection string from [Neon](https://neon.tech/). Copy the **Prisma** connection string from your project dashboard.
 
-### 4. Set up the database
-
-Push the Prisma schema to your database and generate the client:
+### 4. Push the database schema
 
 ```bash
 npx prisma db push
 npx prisma generate
 ```
 
-### 5. Seed the database (optional)
+### 5. Seed the database _(optional)_
 
-Populate the database with initial data:
+Populate with sample projects, blog posts, and gallery photos:
 
 ```bash
 npm run seed
@@ -87,13 +105,13 @@ npm run seed
 
 ### 6. Start the development servers
 
-You need to run **two** servers in parallel:
+Two servers need to run in parallel:
 
 ```bash
-# Terminal 1 — Backend API (port 3000)
+# Terminal 1 — Express API (http://localhost:3000)
 npm run server
 
-# Terminal 2 — Frontend dev server (port 5173)
+# Terminal 2 — Vite frontend (http://localhost:5173)
 npm run dev
 ```
 
@@ -108,9 +126,23 @@ Then open [http://localhost:5173](http://localhost:5173) in your browser.
 | `npm run dev` | Start the Vite frontend dev server |
 | `npm run server` | Start the Express API server |
 | `npm run build` | Build the frontend for production |
-| `npm run preview` | Preview the production build |
+| `npm run preview` | Preview the production build locally |
 | `npm run seed` | Seed the database with sample data |
 | `npm run lint` | Run ESLint |
+
+---
+
+## 🌐 API Endpoints
+
+All endpoints are served from `http://localhost:3000`.
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/projects` | Fetch all projects |
+| `GET` | `/api/blog-posts` | Fetch all blog posts (latest first) |
+| `GET` | `/api/gallery` | Fetch all gallery photos |
+| `GET` | `/api/tech-stack` | Fetch tech stack categories |
+| `GET` | `/api/socials` | Fetch social profile links |
 
 ---
 
@@ -118,48 +150,81 @@ Then open [http://localhost:5173](http://localhost:5173) in your browser.
 
 | Layer | Technology |
 |---|---|
-| Frontend | React 19, Vite, Tailwind CSS v4 |
-| Animations | GSAP |
-| State Management | Zustand + Immer |
-| Backend | Node.js, Express |
-| ORM | Prisma |
-| Database | PostgreSQL (Neon) |
-| Icons | Lucide React |
-
----
-
-## 📝 Customization
-
-### Updating personal info
-
-Edit the constants in `src/constants/index.js` to update:
-- About Me description
-- Social links
-- Default locations / Finder structure
-
-### Updating the resume
-
-Replace the Google Drive link in `src/windows/Resume.jsx` with your own file's `/preview` URL:
-
-```jsx
-src="https://drive.google.com/file/d/YOUR_FILE_ID/preview"
-```
-
-### Adding projects, photos, or blog posts
-
-Use the **Admin** window inside the app (accessible from the Dock) to add/manage content directly in the database.
+| **Frontend** | React 19, Vite 7, Tailwind CSS v4 |
+| **Animations** | GSAP 3 + `@gsap/react` |
+| **State Management** | Zustand 5 + Immer |
+| **Backend** | Node.js, Express 5 |
+| **ORM** | Prisma 5 |
+| **Database** | PostgreSQL (hosted on Neon) |
+| **Icons** | Lucide React |
+| **Utilities** | clsx, dayjs, react-tooltip |
 
 ---
 
 ## 🗄️ Database Models
 
-| Model | Fields |
+| Model | Key Fields |
 |---|---|
-| `Project` | name, icon, description, link, githubLink, imageUrl, techStack |
-| `BlogPost` | title, date, image, link, tags |
-| `GalleryPhoto` | title, img, date, tags, isFavorite |
-| `TechStack` | category, items |
-| `SocialProfile` | text, icon, bg, link |
+| `Project` | `name`, `icon`, `description[]`, `link`, `githubLink`, `imageUrl`, `techStack[]` |
+| `BlogPost` | `title`, `date`, `image`, `link`, `tags[]` |
+| `GalleryPhoto` | `title`, `img`, `date`, `tags[]`, `isFavorite` |
+| `TechStack` | `category` _(unique)_, `items[]` |
+| `SocialProfile` | `text`, `icon`, `bg`, `link` |
+
+---
+
+## 📝 Customization
+
+### Update personal info
+
+Edit `src/constants/index.js` to change:
+- About Me description
+- Social links (fallback data)
+- Finder folder structures and default projects
+
+### Update your resume
+
+Replace the Google Drive embed URL in `src/windows/Resume.jsx`:
+
+```jsx
+src="https://drive.google.com/file/d/YOUR_FILE_ID/preview"
+```
+
+### Manage content (projects, blog posts, photos)
+
+Open the **Admin** window from the Dock inside the running app. You can create, update, and delete all content directly in your database — no code edits needed.
+
+### Terminal commands
+
+The built-in Terminal supports custom commands defined in `src/windows/Terminal.jsx`. Add your own commands by extending the command handler map.
+
+---
+
+## � Deployment
+
+### Frontend (e.g. Vercel / Netlify)
+
+1. Build the app: `npm run build`
+2. Deploy the `dist/` folder
+3. Set the API base URL to point to your deployed backend (update the fetch URLs or use an environment variable like `VITE_API_URL`)
+
+### Backend (e.g. Railway / Render)
+
+1. Set the `DATABASE_URL` and `PORT` environment variables
+2. Start command: `node server/index.js`
+3. Make sure `prisma generate` runs at build time (add to a `postinstall` script if needed)
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/my-feature`
+3. Commit your changes: `git commit -m 'feat: add my feature'`
+4. Push to the branch: `git push origin feature/my-feature`
+5. Open a Pull Request
 
 ---
 
