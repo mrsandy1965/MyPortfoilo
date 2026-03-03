@@ -109,11 +109,20 @@ const useContentStore = create(
                             state.locations.about.children = state.locations.about.children.map((child) => {
                                 const newChild = { ...child };
                                 if (newChild.name === "me.png") {
-                                    if (about.photos?.[0]) newChild.imageUrl = about.photos[0];
+                                    if (about.photos?.[0]) {
+                                        newChild.imageUrl = about.photos[0];
+                                        newChild.icon = about.photos[0]; // Show as Finder thumbnail
+                                    }
                                 } else if (newChild.name === "casual-me.png") {
-                                    if (about.photos?.[1]) newChild.imageUrl = about.photos[1];
+                                    if (about.photos?.[1]) {
+                                        newChild.imageUrl = about.photos[1];
+                                        newChild.icon = about.photos[1];
+                                    }
                                 } else if (newChild.name === "conference-me.png") {
-                                    if (about.photos?.[2]) newChild.imageUrl = about.photos[2];
+                                    if (about.photos?.[2]) {
+                                        newChild.imageUrl = about.photos[2];
+                                        newChild.icon = about.photos[2];
+                                    }
                                 } else if (newChild.name === "about-me.txt") {
                                     newChild.subtitle = about.subtitle || "Meet the Developer Behind the Code";
                                     newChild.description = about.bio || [];
