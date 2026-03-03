@@ -5,7 +5,7 @@ import { useState, useRef, useCallback } from "react";
 import {
     Trash2, Save, LogIn, Loader2, Image as ImageIcon,
     FolderPlus, Globe, Code2, LayoutDashboard, ChevronRight,
-    Upload, X, Star, ExternalLink, Pencil, Check, ArrowLeft
+    Upload, X, Star, ExternalLink, Pencil, Check, ArrowLeft, User
 } from "lucide-react";
 import clsx from "clsx";
 
@@ -78,6 +78,7 @@ const BackBtn = ({ onClick }) => (
 
 const TABS = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, color: 'text-gray-600' },
+    { id: 'about', label: 'About Me', icon: User, color: 'text-orange-600' },
     { id: 'projects', label: 'Projects', icon: FolderPlus, color: 'text-indigo-600' },
     { id: 'photos', label: 'Gallery', icon: ImageIcon, color: 'text-pink-600' },
     { id: 'blogs', label: 'Blogs', icon: Globe, color: 'text-blue-600' },
@@ -90,6 +91,7 @@ const TABS = [
 const Admin = () => {
     const {
         adminToken, adminError, adminLoading, verifyAdminToken,
+        about, updateAbout,
         techStack, blogPosts, gallery, socials, locations,
         createProject, deleteProject, updateProject,
         createPhoto, deletePhoto, updatePhoto,
@@ -129,6 +131,12 @@ const Admin = () => {
     // Social
     const [socialForm, setSocialForm] = useState({ text: '', icon: '', bg: '#6366f1', link: '' });
     const [editingSocial, setEditingSocial] = useState(null);
+
+    // About
+    const [aboutForm, setAboutForm] = useState({ name: about?.name || '', subtitle: about?.subtitle || '', bio: about?.bio?.join('\n') || '' });
+    const [newPhotoFiles, setNewPhotoFiles] = useState([]);
+    const [newPhotoPreviews, setNewPhotoPreviews] = useState([]);
+    const [existingPhotos, setExistingPhotos] = useState(about?.photos || []);
 
     // ── Helpers ──────────────────────────────────────────────────────────────
     const showToast = useCallback((msg, type = 'success') => {
@@ -280,6 +288,82 @@ const Admin = () => {
         if (!cat || !techForm.item) return;
         await withBusy('tech-add', async () => { await addTechItem(cat, techForm.item); setTechForm(t => ({ ...t, item: '', newCategory: '' })); });
     };
+
+    // ── About panel ───────────────────────────────────────────────────────────
+    const handleAboutSubmit = async (e) => {
+        e.preventDefault();
+        await withBusy('about-save', async () => {
+            await updateAbout(
+                { name: aboutForm.name, subtitle: aboutForm.subtitle, bio: aboutForm.bio, existingPhotos },
+                newPhotoFiles
+            );
+            setNewPhotoFiles([]); setNewPhotoPreviews([]);
+        });
+    };
+
+    const handleNewPhotos = (files) => {
+        const fileArr = Array.from(files);
+        setNewPhotoFiles(f => [...f, ...fileArr]);
+        setNewPhotoPreviews(p => [...p, ...fileArr.map(f => URL.createObjectURL(f))]);
+    };
+
+    const removeNewPhoto = (idx) => {
+        setNewPhotoFiles(f => f.filter((_, i) => i !== idx));
+        setNewPhotoPreviews(p => p.filter((_, i) => i !== idx));
+    };
+
+    const AboutPanel = (
+        <div className="space-y-6">
+            <h3 className="flex items-center gap-2 text-base font-bold text-orange-600"><User className="w-5 h-5" /> Edit About Me</h3>
+            <form onSubmit={handleAboutSubmit} className="space-y-4 bg-white border border-gray-100 rounded-2xl p-5">
+                <InputField label="Your Name *" required value={aboutForm.name} onChange={e => setAboutForm(a => ({ ...a, name: e.target.value }))} placeholder="e.g. Sandesh" />
+                <InputField label="Subtitle" value={aboutForm.subtitle} onChange={e => setAboutForm(a => ({ ...a, subtitle: e.target.value }))} placeholder="e.g. Meet the Developer Behind the Code" />
+                <TextAreaField label="Bio (one paragraph per line)" rows={6} value={aboutForm.bio} onChange={e => setAboutForm(a => ({ ...a, bio: e.target.value }))} placeholder={`Hey there! 👋 I'm Sandesh...\nI love building cool stuff!`} />
+
+                <div className="flex flex-col gap-2">
+                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Profile Photos</label>
+
+                    {/* Existing photos */}
+                    {existingPhotos.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-1">
+                            {existingPhotos.map((url, i) => (
+                                <div key={i} className="relative w-16 h-16 rounded-xl overflow-hidden border border-gray-100 group">
+                                    <img src={url} alt={`Photo ${i+1}`} className="w-full h-full object-cover" />
+                                    <button type="button" onClick={() => setExistingPhotos(p => p.filter((_, idx) => idx !== i))} className="absolute inset-0 bg-red-500/70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
+                                        <X className="w-4 h-4 text-white" />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* New photo previews */}
+                    {newPhotoPreviews.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mb-1">
+                            {newPhotoPreviews.map((url, i) => (
+                                <div key={i} className="relative w-16 h-16 rounded-xl overflow-hidden border border-indigo-200 group">
+                                    <img src={url} alt={`New ${i+1}`} className="w-full h-full object-cover" />
+                                    <button type="button" onClick={() => removeNewPhoto(i)} className="absolute inset-0 bg-red-500/70 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
+                                        <X className="w-4 h-4 text-white" />
+                                    </button>
+                                    <span className="absolute bottom-0 left-0 right-0 text-[9px] text-white bg-indigo-500/80 text-center">New</span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Upload button */}
+                    <label className="cursor-pointer flex items-center gap-2 px-3 py-2 border-2 border-dashed border-gray-200 rounded-xl hover:border-orange-300 hover:bg-orange-50 transition w-fit text-sm text-gray-500 hover:text-orange-600">
+                        <Upload className="w-4 h-4" /> Add photo(s)
+                        <input type="file" accept="image/*" multiple className="hidden" onChange={e => handleNewPhotos(e.target.files)} />
+                    </label>
+                    <p className="text-xs text-gray-400">These appear in your About Me window on the desktop.</p>
+                </div>
+
+                <SubmitBtn loading={busy['about-save']} label="Save About Me" color="bg-orange-600 hover:bg-orange-700" />
+            </form>
+        </div>
+    );
 
     // ── Tab Panels ────────────────────────────────────────────────────────────
 
@@ -541,6 +625,7 @@ const Admin = () => {
 
     const tabContent = {
         dashboard: Dashboard,
+        about: AboutPanel,
         projects: Projects,
         photos: Photos,
         blogs: Blogs,

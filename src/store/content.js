@@ -57,6 +57,9 @@ const useContentStore = create(
         adminError: '',
         adminLoading: false,
 
+        // About Me
+        about: { name: 'Sandesh', subtitle: 'Meet the Developer Behind the Code', bio: [], photos: [] },
+
         setAdminToken: (token) => set((state) => { state.adminToken = token; state.adminError = ''; }),
 
         verifyAdminToken: async (token) => {
@@ -79,12 +82,13 @@ const useContentStore = create(
         fetchContent: async () => {
             set((state) => { state.isLoading = true; state.error = null; });
             try {
-                const [techRes, blogRes, galleryRes, socialRes, projectRes] = await Promise.all([
+                const [techRes, blogRes, galleryRes, socialRes, projectRes, aboutRes] = await Promise.all([
                     fetch(`${API}/api/tech-stack`),
                     fetch(`${API}/api/blog-posts`),
                     fetch(`${API}/api/gallery`),
                     fetch(`${API}/api/socials`),
                     fetch(`${API}/api/projects`),
+                    fetch(`${API}/api/about`),
                 ]);
 
                 const techStack = await techRes.json();
@@ -92,13 +96,33 @@ const useContentStore = create(
                 const gallery = await galleryRes.json();
                 const socials = await socialRes.json();
                 const projects = await projectRes.json();
+                const about = aboutRes.ok ? await aboutRes.json() : null;
 
                 set((state) => {
                     state.techStack = Array.isArray(techStack) ? techStack : state.techStack;
                     state.blogPosts = Array.isArray(blogPosts) ? blogPosts : state.blogPosts;
                     state.gallery = Array.isArray(gallery) ? gallery : state.gallery;
                     state.socials = Array.isArray(socials) ? socials : state.socials;
-
+                    if (about && about.id) {
+                        state.about = about;
+                        if (state.locations.about && state.locations.about.children) {
+                            state.locations.about.children = state.locations.about.children.map((child) => {
+                                const newChild = { ...child };
+                                if (newChild.name === "me.png") {
+                                    if (about.photos?.[0]) newChild.imageUrl = about.photos[0];
+                                } else if (newChild.name === "casual-me.png") {
+                                    if (about.photos?.[1]) newChild.imageUrl = about.photos[1];
+                                } else if (newChild.name === "conference-me.png") {
+                                    if (about.photos?.[2]) newChild.imageUrl = about.photos[2];
+                                } else if (newChild.name === "about-me.txt") {
+                                    newChild.subtitle = about.subtitle || "Meet the Developer Behind the Code";
+                                    newChild.description = about.bio || [];
+                                    if (about.photos?.[0]) newChild.image = about.photos[0];
+                                }
+                                return newChild;
+                            });
+                        }
+                    }
                     if (state.locations.work && Array.isArray(projects)) {
                         state.locations.work.children = mapProjectsToLocations(projects);
                     }
@@ -109,6 +133,27 @@ const useContentStore = create(
                 console.error('Failed to fetch content:', error);
                 set((state) => { state.isLoading = false; state.error = error.message; });
             }
+        },
+
+        updateAbout: async (aboutData, newPhotos) => {
+            const token = get().adminToken;
+            // Upload any new photos to Cloudinary first
+            const uploadedPhotos = await Promise.all(
+                (newPhotos || []).map(f => get().uploadImage(f))
+            );
+            const allPhotos = [
+                ...(aboutData.existingPhotos || []),
+                ...uploadedPhotos,
+            ];
+            const res = await fetch(`${API}/api/about`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json', 'X-Admin-Token': token },
+                body: JSON.stringify({ ...aboutData, photos: allPhotos }),
+            });
+            if (!res.ok) throw new Error('Failed to update about');
+            const updated = await res.json();
+            set((state) => { state.about = updated; });
+            return updated;
         },
 
         // ---- Upload Helper ----

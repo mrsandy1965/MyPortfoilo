@@ -100,12 +100,61 @@ app.get('/api/socials', async (req, res) => {
     }
 });
 
+app.get('/api/about', async (req, res) => {
+    try {
+        // Always return the single about record (create default if none)
+        let about = await prisma.about.findFirst();
+        if (!about) {
+            about = await prisma.about.create({
+                data: {
+                    name: 'Sandesh',
+                    subtitle: 'Meet the Developer Behind the Code',
+                    bio: [
+                        "Hey there! 👋 I'm Sandesh, CS student who loves building cool stuff.",
+                        "I've worked on real projects, love collaborating with teams, and enjoy helping others level up their skills.",
+                        "When I'm not coding, you'll probably find me solving competitive programming problems. 🤖"
+                    ],
+                    photos: [],
+                },
+            });
+        }
+        res.json(about);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to fetch about' });
+    }
+});
+
 // =====================
 //  ADMIN AUTH CHECK
 // =====================
 
 app.post('/api/admin/verify', requireAdmin, (req, res) => {
     res.json({ ok: true });
+});
+
+// =====================
+//  ABOUT (ADMIN)
+// =====================
+
+app.put('/api/about', requireAdmin, async (req, res) => {
+    try {
+        const { name, subtitle, bio, photos } = req.body;
+        const existing = await prisma.about.findFirst();
+        const data = {
+            name: name || 'Sandesh',
+            subtitle: subtitle || '',
+            bio: Array.isArray(bio) ? bio : bio ? bio.split('\n').filter(Boolean) : [],
+            photos: Array.isArray(photos) ? photos : [],
+        };
+        const about = existing
+            ? await prisma.about.update({ where: { id: existing.id }, data })
+            : await prisma.about.create({ data });
+        res.json(about);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Failed to update about' });
+    }
 });
 
 // =====================
