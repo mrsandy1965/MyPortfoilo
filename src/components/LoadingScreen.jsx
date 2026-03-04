@@ -19,7 +19,7 @@ const LoadingScreen = () => {
             className="fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center gap-8 text-white"
         >
             <img 
-                src="/images/apple.png" 
+                src="/images/logo.svg" 
                 alt="Apple Logo" 
                 className="w-24 h-24 object-contain invert" // Assuming white logo needed, or use existing asset
                 onError={(e) => { e.target.style.display = 'none'; }} // Fallback if image missing
@@ -31,7 +31,7 @@ const LoadingScreen = () => {
                  </div>
             </div>
             
-            <style jsx>{`
+            <style>{`
                 @keyframes progress {
                     0% { width: 0%; }
                     100% { width: 100%; }
