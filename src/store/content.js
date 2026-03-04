@@ -8,7 +8,8 @@ import {
     socials as initialSocials
 } from '#constants';
 
-const API = 'http://localhost:3000';
+const API = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+
 
 const mapProjectsToLocations = (projects) =>
     projects.map((p, index) => {

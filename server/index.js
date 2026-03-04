@@ -36,8 +36,17 @@ const uploadToCloudinary = (buffer) =>
     });
 
 // ------ Middleware ------
-app.use(cors());
+app.use(cors({
+    origin: [
+        'http://localhost:5173',
+        'http://localhost:4173',
+        process.env.FRONTEND_URL, // set this in Render env vars to your Vercel URL
+    ].filter(Boolean),
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'X-Admin-Token'],
+}));
 app.use(express.json());
+
 
 // Admin Auth Middleware
 const requireAdmin = (req, res, next) => {
