@@ -1,5 +1,4 @@
 import React from 'react'
-import { Analytics } from '@vercel/analytics/react'
 import { Dock, Home, Navbar, Welcome, LoadingScreen} from '#components'
 import { TerminalWindow, SafariWindow, ContactWindow, FinderWindow, ResumeWindow, TxtFileWindow, ImgFileWindow, PhotosWindow, AdminWindow } from '#windows'
 import useContentStore from './store/content'
@@ -45,7 +44,6 @@ const App = () => {
       <PhotosWindow />
       <AdminWindow />
       <Home />
-      <Analytics />
     </main>
   )
 }

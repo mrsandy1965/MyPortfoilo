@@ -40,6 +40,8 @@ app.use(cors({
     origin: [
         'http://localhost:5173',
         'http://localhost:4173',
+        'https://my-portfoilo-git-main-mrsandy1965s-projects.vercel.app',
+        'https://www.mrsandy1965.tech',
         process.env.FRONTEND_URL, // set this in Render env vars to your Vercel URL
     ].filter(Boolean),
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
