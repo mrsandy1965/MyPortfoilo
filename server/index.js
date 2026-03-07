@@ -66,6 +66,12 @@ const requireAdmin = (req, res, next) => {
 //  PUBLIC READ ROUTES
 // =====================
 
+app.get('/api/health', (req, res) => {
+    const timestamp = new Date().toISOString();
+    console.log(`[HEALTH CHECK] - ${timestamp} - Server is healthy`);
+    res.status(200).json({ status: 'success', timestamp, message: 'Server is healthy' });
+});
+
 app.get('/api/tech-stack', async (req, res) => {
     try {
         const techStack = await prisma.techStack.findMany({ orderBy: { id: 'asc' } });
