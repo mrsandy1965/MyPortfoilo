@@ -138,6 +138,8 @@ All endpoints are served from `http://localhost:3000`.
 
 | Method | Endpoint | Description |
 |---|---|---|
+| `GET` | `/api/health` | Check server health status |
+| `GET` | `/api/about` | Fetch about me details |
 | `GET` | `/api/projects` | Fetch all projects |
 | `GET` | `/api/blog-posts` | Fetch all blog posts (latest first) |
 | `GET` | `/api/gallery` | Fetch all gallery photos |
@@ -170,6 +172,7 @@ All endpoints are served from `http://localhost:3000`.
 | `GalleryPhoto` | `title`, `img`, `date`, `tags[]`, `isFavorite` |
 | `TechStack` | `category` _(unique)_, `items[]` |
 | `SocialProfile` | `text`, `icon`, `bg`, `link` |
+| `About` | `name`, `subtitle`, `bio[]`, `photos[]` |
 
 ---
 
