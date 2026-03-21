@@ -17,6 +17,7 @@ A macOS-style interactive developer portfolio built with **React 19**, **Vite**,
 - 📬 **Contact** — social links window
 - 🍎 Apple-style animated boot / loading screen
 - 🔐 **Admin** portal for full content management (projects, blog, gallery, socials)
+- ☁️ **Cloudinary** integration for seamless image uploads in the Admin portal
 - ⚡ All data is live-synced from PostgreSQL on every load
 
 ---
@@ -82,7 +83,18 @@ Create a `.env` file in the **root** of the project:
 # PostgreSQL connection string (required)
 DATABASE_URL="postgresql://USER:PASSWORD@HOST/DATABASE?sslmode=require"
 
-# Optional — defaults to 3000
+# Admin secret for authentication (required for Admin portal)
+ADMIN_SECRET="your_secure_admin_token"
+
+# Cloudinary credentials (required for image uploads)
+CLOUDINARY_CLOUD_NAME="your_cloud_name"
+CLOUDINARY_API_KEY="your_api_key"
+CLOUDINARY_API_SECRET="your_api_secret"
+
+# Frontend URL (optional - for CORS in production)
+FRONTEND_URL="https://your-portfolio.vercel.app"
+
+# Server Port (optional - defaults to 3000)
 PORT=3000
 ```
 
@@ -145,6 +157,8 @@ All endpoints are served from `http://localhost:3000`.
 | `GET` | `/api/gallery` | Fetch all gallery photos |
 | `GET` | `/api/tech-stack` | Fetch tech stack categories |
 | `GET` | `/api/socials` | Fetch social profile links |
+| `POST` | `/api/admin/verify` | Verify admin authentication token |
+| `POST` | `/api/upload` | Upload image to Cloudinary |
 
 ---
 
@@ -155,9 +169,10 @@ All endpoints are served from `http://localhost:3000`.
 | **Frontend** | React 19, Vite 7, Tailwind CSS v4 |
 | **Animations** | GSAP 3 + `@gsap/react` |
 | **State Management** | Zustand 5 + Immer |
-| **Backend** | Node.js, Express 5 |
+| **Backend** | Node.js, Express 5, Multer |
 | **ORM** | Prisma 5 |
 | **Database** | PostgreSQL (hosted on Neon) |
+| **Cloud Storage** | Cloudinary |
 | **Icons** | Lucide React |
 | **Utilities** | clsx, dayjs, react-tooltip |
 
