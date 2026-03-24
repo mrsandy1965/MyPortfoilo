@@ -3,8 +3,24 @@ import React, { useEffect, useState } from 'react'
 import { navIcons, navLinks } from '#constants'
 import useWindowStore from '#store/window';
 
-const  Navbar = () => {
-    const {openWindow } = useWindowStore();
+const useBattery = () => {
+  const [battery, setBattery] = useState(null);
+  useEffect(() => {
+    if (!navigator.getBattery) return;
+    navigator.getBattery().then(b => {
+      const update = () => setBattery({ level: Math.round(b.level * 100), charging: b.charging });
+      update();
+      b.addEventListener('levelchange', update);
+      b.addEventListener('chargingchange', update);
+      return () => { b.removeEventListener('levelchange', update); b.removeEventListener('chargingchange', update); };
+    });
+  }, []);
+  return battery;
+};
+
+const Navbar = () => {
+    const { openWindow } = useWindowStore();
+    const battery = useBattery();
     const [currentTime , setCurrentTime] = useState(dayjs().format('ddd D MMM h:mm:ss A'))
     useEffect(() => {
         const timer = setInterval(() => {
@@ -40,6 +56,11 @@ const  Navbar = () => {
             <ul>
                 {navIcons.map((item)=><li key={item.id}><img src={item.img} className='icon-hover w-4 h-4' alt={`icon-${item.id}`} /></li> )}
             </ul>
+            {battery && (
+              <span title={`Battery: ${battery.level}%`} style={{ fontSize: '0.75rem', opacity: 0.85 }}>
+                {battery.charging ? '⚡' : '🔋'} {battery.level}%
+              </span>
+            )}
             <time>{currentTime}</time>
         </div>
     </nav>
