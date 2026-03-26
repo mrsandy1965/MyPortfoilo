@@ -18,9 +18,24 @@ const useBattery = () => {
   return battery;
 };
 
+const useNetwork = () => {
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+  useEffect(() => {
+    const updateOnlineStatus = () => setIsOnline(navigator.onLine);
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    return () => {
+      window.removeEventListener('online', updateOnlineStatus);
+      window.removeEventListener('offline', updateOnlineStatus);
+    };
+  }, []);
+  return isOnline;
+};
+
 const Navbar = () => {
     const { openWindow } = useWindowStore();
     const battery = useBattery();
+    const isOnline = useNetwork();
     const [currentTime , setCurrentTime] = useState(dayjs().format('ddd D MMM h:mm:ss A'))
     useEffect(() => {
         const timer = setInterval(() => {
@@ -54,8 +69,26 @@ const Navbar = () => {
 
         <div>
             <ul>
-                {navIcons.map((item)=><li key={item.id}><img src={item.img} className='icon-hover w-4 h-4' alt={`icon-${item.id}`} /></li> )}
+                {navIcons.map((item, index) => (
+                    <li key={item.id}>
+                        <img 
+                            src={item.img} 
+                            className='icon-hover w-4 h-4 cursor-pointer' 
+                            alt={`icon-${item.id}`} 
+                            onClick={index === navIcons.length - 1 ? () => {
+                                if (!document.fullscreenElement) {
+                                    document.documentElement.requestFullscreen();
+                                } else if (document.exitFullscreen) {
+                                    document.exitFullscreen();
+                                }
+                            } : undefined}
+                        />
+                    </li>
+                ))}
             </ul>
+            <span title={isOnline ? "Online" : "Offline"} className="cursor-pointer" style={{ fontSize: '0.9rem', opacity: 0.85 }}>
+                {isOnline ? '🛜' : '⚠️'}
+            </span>
             {battery && (
               <span title={`Battery: ${battery.level}%`} style={{ fontSize: '0.75rem', opacity: 0.85 }}>
                 {battery.charging ? '⚡' : '🔋'} {battery.level}%

@@ -98,25 +98,28 @@ body {
     }
   }
 
-  .window-controls {
-    @apply flex gap-2;
-
-    button {
-      @apply border-0 p-0 bg-transparent;
+    .window-controls {
+      @apply flex gap-2 group;
+  
+      button {
+        @apply border-0 p-0 bg-transparent flex items-center justify-center text-[8px] font-bold opacity-0 group-hover:opacity-100 transition-opacity;
+      }
+  
+      .close {
+        @apply size-3.5 rounded-full bg-[#ff6157] cursor-pointer;
+        &::after { content: "✕"; @apply text-[#4c0000]; }
+      }
+  
+      .minimize {
+        @apply size-3.5 rounded-full bg-[#ffc030];
+        &::after { content: "−"; @apply text-[#995700] mb-0.5; }
+      }
+  
+      .maximize {
+        @apply size-3.5 rounded-full bg-[#2acb42];
+        &::after { content: "⤢"; @apply text-[#006500]; }
+      }
     }
-
-    .close {
-      @apply size-3.5 rounded-full bg-[#ff6157] cursor-pointer;
-    }
-
-    .minimize {
-      @apply size-3.5 rounded-full bg-[#ffc030];
-    }
-
-    .maximize {
-      @apply size-3.5 rounded-full bg-[#2acb42];
-    }
-  }
 
   .window-header {
     @apply flex items-center justify-between px-4 py-3 rounded-t-lg bg-gray-50 border-b border-gray-200 select-none text-sm text-gray-400;
