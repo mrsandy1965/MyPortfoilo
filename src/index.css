@@ -90,7 +90,7 @@ body {
     }
 
     .dock-icon {
-      @apply size-14 3xl:size-20 cursor-pointer;
+      @apply size-14 3xl:size-20 cursor-pointer transition-transform duration-200 hover:scale-110 active:scale-95;
 
       img {
         @apply object-cover object-center;
