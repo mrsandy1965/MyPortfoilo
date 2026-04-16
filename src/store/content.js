@@ -8,7 +8,9 @@ import {
     socials as initialSocials
 } from '#constants';
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+const rawApi = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+// Sanitize rawApi in case Vercel env ends with /api or /
+const API = rawApi.replace(/\/api\/?$/, '').replace(/\/+$/, '');
 
 
 const mapProjectsToLocations = (projects) =>

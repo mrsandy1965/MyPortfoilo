@@ -37,13 +37,21 @@ const uploadToCloudinary = (buffer) =>
 
 // ------ Middleware ------
 app.use(cors({
-    origin: [
-        'http://localhost:5173',
-        'http://localhost:4173',
-        'https://my-portfoilo-git-main-mrsandy1965s-projects.vercel.app',
-        'https://www.mrsandy1965.tech',
-        process.env.FRONTEND_URL, // set this in Render env vars to your Vercel URL
-    ].filter(Boolean),
+    origin: function (origin, callback) {
+        const allowedOrigins = [
+            'http://localhost:5173',
+            'http://localhost:4173',
+            'https://my-portfoilo-git-main-mrsandy1965s-projects.vercel.app',
+            'https://www.mrsandy1965.tech',
+            process.env.FRONTEND_URL
+        ].filter(Boolean);
+
+        if (!origin || allowedOrigins.includes(origin) || origin.endsWith('.vercel.app')) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     allowedHeaders: ['Content-Type', 'X-Admin-Token'],
 }));
